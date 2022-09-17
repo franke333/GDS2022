@@ -14,12 +14,16 @@ public class MaterialStorage : MonoBehaviour
     {
         if(queueTake.Count != 0)
         {
-            queueTake.Dequeue().NextOrder();
+            Worker newworker = queueTake.Dequeue();
+            newworker.hasRock = true;
+            newworker.NextOrder();
+            worker.hasRock = false;
             worker.NextOrder();
         }
         else if (limit != count)
         {
             count++;
+            worker.hasRock = false;
             worker.NextOrder();
         }
         else
@@ -35,12 +39,16 @@ public class MaterialStorage : MonoBehaviour
     {
         if(queuePlace.Count != 0)
         {
+            worker.hasRock = true;
             worker.NextOrder();
-            queuePlace.Dequeue().NextOrder();
+            Worker newworker = queuePlace.Dequeue();
+            newworker.hasRock = false;
+            newworker.NextOrder();
         }
         else if (count != 0)
         {
             count--;
+            worker.hasRock = true;
             worker.NextOrder();
         }
         else

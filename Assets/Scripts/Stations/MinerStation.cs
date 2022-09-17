@@ -28,6 +28,7 @@ public class MinerStation : AStation<MinerStation>
     private void WaitInMineOrder(Worker worker)
     {
         worker.OrderWait(Random.Range(9, 12), false);
+        worker.hasRock = true;
     }
 
     // todo disperse multiple workers at one point

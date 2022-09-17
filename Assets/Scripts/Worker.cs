@@ -13,6 +13,7 @@ public class Worker : MonoBehaviour
 {
     public string Name;
     public string workerType;
+    public bool hasRock;
 
     public List<dWorkerOrders> orders;
 
@@ -33,7 +34,7 @@ public class Worker : MonoBehaviour
     private float currentWalkTime;
 
     [SerializeField]
-    private SpriteRenderer sr, srHat;
+    private SpriteRenderer sr, srHat, srStone;
 
     private Animator animator;
     int animatorVarHash;
@@ -118,6 +119,7 @@ public class Worker : MonoBehaviour
         if (orderIndex == orders.Count)
             orderIndex = 0;
         orders[orderIndex].Invoke(this);
+        EnableDraw(true);
     }
     
 
@@ -177,20 +179,22 @@ public class Worker : MonoBehaviour
     {
         sr.sortingOrder = layer;
         srHat.sortingOrder = layer + 1;
+        srStone.sortingOrder = layer + 1;
     }
 
     private void EnableDraw(bool value)
     {
         sr.enabled = value;
         srHat.enabled = value;
+        srStone.enabled = hasRock;
     }
 
     void UpdateAnim(Vector3 movement)
     {
         if(movement.x > 0)
-            sr.flipX = srHat.flipX = false;
+            sr.flipX = srHat.flipX = srStone.flipX = false;
         else if(movement.x < 0)
-            sr.flipX = srHat.flipX = true;
+            sr.flipX = srHat.flipX = srStone.flipX = true;
 
 
         if (movement.x == 0)
