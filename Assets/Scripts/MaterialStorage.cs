@@ -10,6 +10,11 @@ public class MaterialStorage : MonoBehaviour
     public Queue<Worker> queuePlace = new Queue<Worker>();
     public Queue<Worker> queueTake = new Queue<Worker>();
 
+    [SerializeField]
+    Sprite stash0, stash1, stash2;
+    [SerializeField]
+    SpriteRenderer sr;
+
     public void TryPlaceMaterial(Worker worker)
     {
         if(queueTake.Count != 0)
@@ -23,6 +28,7 @@ public class MaterialStorage : MonoBehaviour
         else if (limit != count)
         {
             count++;
+            UpdateSprite();
             worker.hasRock = false;
             worker.NextOrder();
         }
@@ -48,6 +54,7 @@ public class MaterialStorage : MonoBehaviour
         else if (count != 0)
         {
             count--;
+            UpdateSprite();
             worker.hasRock = true;
             worker.NextOrder();
         }
@@ -58,5 +65,15 @@ public class MaterialStorage : MonoBehaviour
             //TODO place worker in queue area
             worker.transform.position += new Vector3(Random.Range(0, 0.65f), Random.Range(-0.35f, 0.35f), 0);
         }
+    }
+
+    void UpdateSprite()
+    {
+        if (count == 0)
+            sr.sprite = stash0;
+        else if (count == limit)
+            sr.sprite = stash2;
+        else
+            sr.sprite = stash1;
     }
 }
