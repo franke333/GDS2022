@@ -8,11 +8,30 @@ public class BuildStation : AStation<BuildStation>
     private GameObject spawnPoint;
     [SerializeField]
     private Worker workerPrefab;
+    [SerializeField]
+    private MaterialStorage towerStorage;
     public override string Name => "Build Station";
 
     private void MakeProgress(Worker worker)
     {
+        Tower.Instance.Progress++;
+        worker.NextOrder();
+    }
 
+    private void GoToStorage(Worker worker)
+    {
+        worker.OrderWalk(Tower.Instance.pickupPos.transform.position);
+    }
+
+    private void GoToWorkPlace(Worker worker)
+    {
+        var places = Tower.Instance.builderPoints;
+        worker.OrderWalk(places[Random.Range(0, places.Count)].transform.position);
+    }
+
+    private void WorkHere(Worker worker)
+    {
+        worker.OrderWait(Random.Range(8f, 10f), true);
     }
 
     public override void AddWorkers(int count)
@@ -25,6 +44,11 @@ public class BuildStation : AStation<BuildStation>
             worker.orders = new List<dWorkerOrders>()
             {
                 //TODO
+                GoToStorage,
+                towerStorage.TryPickupMaterial,
+                GoToWorkPlace,
+                WorkHere,
+                MakeProgress
             };
             worker.SetLayer(workers.Count * 2);
         }

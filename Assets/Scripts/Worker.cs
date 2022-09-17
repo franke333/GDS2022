@@ -70,8 +70,18 @@ public class Worker : MonoBehaviour
         currentWalkTime = reversed ? inSeconds : 0;
     }
 
+    public void ResetOrders()
+    {
+        orderIndex = -1;
+        NextOrder();
+    }
     public void OrderNextLevelIfExist(bool up)
     {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            NextOrder();
+            return;
+        }
         if (up)
         {
             if (currentTowerLevel != Tower.Instance.levels.Count - 1)

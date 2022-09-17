@@ -22,7 +22,7 @@ public class MinerStation : AStation<MinerStation>
 
     private void ReturnWorkerOrder(Worker worker)
     {
-        worker.OrderWalk(transform.position);
+        worker.OrderWalk(spawnPoint.transform.position);
     }
 
     private void WaitInMineOrder(Worker worker)
