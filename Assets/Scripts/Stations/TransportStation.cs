@@ -23,28 +23,20 @@ public class TransportStation : AStation<TransportStation>
 
     private void GoToTowerBezier(Worker worker)
     {
-        if (Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
+
         worker.OrderWalkBezier(Tower.Instance.towerEntrance,4f);
     }
 
     private void GoToQuarryBezier(Worker worker)
     {
-        if (Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
+
         worker.OrderWalkBezier(Tower.Instance.towerEntrance, 4f, true);
     }
     private void GoToTowerBeforeBezier(Worker worker)
     {
         if (Tower.Instance.levels.Count == 0)
         {
-            worker.NextOrder();
+            worker.JumpToOrder(worker.orders.IndexOf(GoToTowerStorage));
             return;
         }
         worker.OrderWalk(Tower.Instance.towerEntrance.be_start.transform.position);
@@ -54,7 +46,7 @@ public class TransportStation : AStation<TransportStation>
     {
         if (Tower.Instance.levels.Count == 0)
         {
-            worker.NextOrder();
+            worker.JumpToOrder(worker.orders.IndexOf(GoToQuarry));
             return;
         }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
@@ -62,22 +54,12 @@ public class TransportStation : AStation<TransportStation>
     }
     private void UpTheTowerFront(Worker worker)
     {
-        if(Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalkBezier(level.front, level.traverseInS);
     }
 
     private void UpTheTowerBack(Worker worker)
     {
-        if (Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.end.transform.position, false);
     }
@@ -89,22 +71,12 @@ public class TransportStation : AStation<TransportStation>
 
     private void DownTheTowerFront(Worker worker)
     {
-        if (Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalkBezier(level.front, level.traverseInS, true);
     }
 
     private void DownTheTowerBack(Worker worker)
     {
-        if (Tower.Instance.levels.Count == 0)
-        {
-            worker.NextOrder();
-            return;
-        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.front.be_end.transform.position, false);
     }
@@ -113,6 +85,40 @@ public class TransportStation : AStation<TransportStation>
     {
         worker.OrderNextLevelIfExist(false);
     }
+
+    public void StartGoingUp(Worker worker)
+    {
+        int index = worker.orders.IndexOf(UpTheTowerCheckLevel);
+        worker.JumpToOrder(index);
+    }
+    public void StartGoingDown(Worker worker)
+    {
+        int index = worker.orders.IndexOf(DownTheTowerCheckLevel);
+        worker.JumpToOrder(index);
+    }
+
+    private void TryToFillElevator(Worker worker)
+    {
+        ElevatorScript elevator = Tower.Instance.levels[worker.currentTowerLevel].elevator;
+        if (elevator == null)
+        {
+            worker.NextOrder();
+            return;
+        }
+        elevator.TryPlaceDown(worker);
+    }
+
+    private void TryToGrabFromElevator(Worker worker)
+    {
+        ElevatorScript elevator = Tower.Instance.levels[worker.currentTowerLevel].elevator;
+        if (elevator == null)
+        {
+            worker.NextOrder();
+            return;
+        }
+        elevator.TryPickUp(worker);
+    }
+
 
     public override string Name => "Transporters";
 
@@ -125,18 +131,20 @@ public class TransportStation : AStation<TransportStation>
             worker.Name = $"Worker {workers.Count}";
             worker.orders = new List<dWorkerOrders>()
             {
-                GoToQuarry,
+                GoToQuarry,                                   
                 quarryStorage.TryPickupMaterial,
                 GoToTowerBeforeBezier,
                 GoToTowerBezier,
                 UpTheTowerFront,
                 UpTheTowerBack,
+                TryToFillElevator,
                 UpTheTowerCheckLevel,
                 GoToTowerStorage,
                 towerStorage.TryPlaceMaterial,
                 ReturnToRailing,
-                DownTheTowerBack,
+                DownTheTowerBack,                               
                 DownTheTowerFront,
+                TryToGrabFromElevator,
                 DownTheTowerCheckLevel,
                 GoToQuarryBezier
             };
