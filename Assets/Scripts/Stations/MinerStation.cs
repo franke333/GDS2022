@@ -11,7 +11,7 @@ public class MinerStation : AStation<MinerStation>
     [SerializeField]
     private MaterialStorage quarryStorage;
 
-    private List<Worker> workers = new List<Worker>();
+    
 
     public override string Name => "Stone Quarry";
 
@@ -45,17 +45,13 @@ public class MinerStation : AStation<MinerStation>
                 ReturnWorkerOrder,
                 WaitInMineOrder
             };
+            worker.SetLayer(workers.Count*2);
         }
     }
 
     public override int CostNext()
     {
         throw new System.NotImplementedException();
-    }
-
-    public override int GetWorkersCount()
-    {
-        return workers.Count;
     }
 
 

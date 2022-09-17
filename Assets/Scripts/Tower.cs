@@ -8,10 +8,13 @@ public class Tower : Singleton<Tower>
     [SerializeField]
     private TowerLevel levelPrefab;
 
+    public List<GameObject> builderPoints;
 
     public GameObject pickupPos, placedownPos, storage;
 
     public float LayerHeight= 4.35f;
+
+    public int progress = 0;
 
     public void NextLevel()
     {
@@ -20,7 +23,13 @@ public class Tower : Singleton<Tower>
         pickupPos.transform.position += up;
         placedownPos.transform.position += up;
         storage.transform.position += up;
-        levels[levels.Count - 1].GetComponent<SpriteRenderer>().sortingOrder = levels.Count - 1;
+        for (int i = 0; i < builderPoints.Count; i++)
+            builderPoints[i].transform.position += up;
+        foreach (var builder in BuildStation.Instance.workers)
+            builder.transform.position += up;
+        foreach (var transporters in storage.GetComponent<MaterialStorage>().queuePlace)
+            transporters.transform.position += up;
+        levels[levels.Count - 1].GetComponent<SpriteRenderer>().sortingOrder = levels.Count - 100;
     }
 
     private void Update()

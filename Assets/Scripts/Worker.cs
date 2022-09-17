@@ -19,7 +19,7 @@ public class Worker : MonoBehaviour
     [SerializeField]
     private float speed=1f;
 
-    private SpriteRenderer srHat;
+    
 
     private WorkerOrderType orderType;
     private float waitTime;
@@ -32,12 +32,11 @@ public class Worker : MonoBehaviour
     private float walkOverSeconds;
     private float currentWalkTime;
 
-    private SpriteRenderer sr;
+    [SerializeField]
+    private SpriteRenderer sr, srHat;
 
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
-        srHat = transform.GetChild(0).GetComponent<SpriteRenderer>();
         orderIndex=-1;
         NextOrder();
     }
@@ -66,7 +65,6 @@ public class Worker : MonoBehaviour
     {
         EnableDraw(true);
         orderType = reversed ? WorkerOrderType.WalkBezierReversed : WorkerOrderType.WalkBezier;
-        SetLayer(currentTowerLevel + 2);
         bc = curve;
         walkOverSeconds = inSeconds;
         currentWalkTime = reversed ? inSeconds : 0;
@@ -152,7 +150,7 @@ public class Worker : MonoBehaviour
 
     }
 
-    private void SetLayer(int layer)
+    public void SetLayer(int layer)
     {
         sr.sortingOrder = layer;
         srHat.sortingOrder = layer + 1;

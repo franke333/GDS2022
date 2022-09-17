@@ -11,8 +11,6 @@ public class TransportStation : AStation<TransportStation>
     [SerializeField]
     private MaterialStorage quarryStorage,towerStorage;
 
-    private List<Worker> workers = new List<Worker>();
-
     private void GoToQuarry(Worker worker)
     {
         worker.OrderWalk(quarryPickUp.transform.position);
@@ -79,7 +77,6 @@ public class TransportStation : AStation<TransportStation>
             worker.Name = $"Worker {workers.Count}";
             worker.orders = new List<dWorkerOrders>()
             {
-                //TODO
                 GoToQuarry,
                 quarryStorage.TryPickupMaterial,
                 GoToTower,
@@ -93,15 +90,11 @@ public class TransportStation : AStation<TransportStation>
                 DownTheTowerFront,
                 DownTheTowerCheckLevel
             };
+            worker.SetLayer(workers.Count*2);
         }
     }
 
     public override int CostNext()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override int GetWorkersCount()
     {
         throw new System.NotImplementedException();
     }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class AStation<T> : Singleton<AStation<T>>
 {
-
+    public List<Worker> workers = new List<Worker>();
     public abstract string Name { get; }
-    public abstract int GetWorkersCount();
+    public int GetWorkersCount() => workers.Count;
 
     public abstract void AddWorkers(int count);
 
