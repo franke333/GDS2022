@@ -66,7 +66,18 @@ public class TransportStation : AStation<TransportStation>
 
     private void UpTheTowerCheckLevel(Worker worker)
     {
-        worker.OrderNextLevelIfExist(true);
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
+        if (worker.currentTowerLevel != Tower.Instance.levels.Count - 1)
+        {
+            worker.currentTowerLevel++;
+            worker.JumpToOrder(worker.orders.IndexOf(TryToFillElevator));
+        }
+        else
+            worker.NextOrder();
     }
 
     private void DownTheTowerFront(Worker worker)
@@ -83,7 +94,18 @@ public class TransportStation : AStation<TransportStation>
 
     private void DownTheTowerCheckLevel(Worker worker)
     {
-        worker.OrderNextLevelIfExist(false);
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
+        if (worker.currentTowerLevel != 0)
+        {
+            worker.currentTowerLevel--;
+            worker.JumpToOrder(worker.orders.IndexOf(TryToGrabFromElevator));
+        }
+        else
+            worker.NextOrder();
     }
 
     public void StartGoingUp(Worker worker)
@@ -135,16 +157,16 @@ public class TransportStation : AStation<TransportStation>
                 quarryStorage.TryPickupMaterial,
                 GoToTowerBeforeBezier,
                 GoToTowerBezier,
+                TryToFillElevator,
                 UpTheTowerFront,
                 UpTheTowerBack,
-                TryToFillElevator,
                 UpTheTowerCheckLevel,
                 GoToTowerStorage,
                 towerStorage.TryPlaceMaterial,
                 ReturnToRailing,
+                TryToGrabFromElevator,
                 DownTheTowerBack,                               
                 DownTheTowerFront,
-                TryToGrabFromElevator,
                 DownTheTowerCheckLevel,
                 GoToQuarryBezier
             };
