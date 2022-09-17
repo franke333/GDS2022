@@ -32,6 +32,7 @@ public class BuildStation : AStation<BuildStation>
     private void WorkHere(Worker worker)
     {
         worker.OrderWait(Random.Range(8f, 10f), true);
+        worker.hasRock = false;
     }
 
     public override void AddWorkers(int count)

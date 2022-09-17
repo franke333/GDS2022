@@ -119,7 +119,7 @@ public class Worker : MonoBehaviour
         if (orderIndex == orders.Count)
             orderIndex = 0;
         orders[orderIndex].Invoke(this);
-        EnableDraw(true);
+        srStone.enabled = sr.enabled && hasRock;
     }
     
 

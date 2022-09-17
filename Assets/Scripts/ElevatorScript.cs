@@ -45,6 +45,7 @@ public class ElevatorScript : MonoBehaviour
         if (stashCurrent > 0)
         {
             stashCurrent--;
+            worker.hasRock = true;
             ts.StartGoingUp(worker);
             UpdateSprites();
         }
@@ -59,6 +60,7 @@ public class ElevatorScript : MonoBehaviour
             elevatorCurrent++;
             if (elevatorCurrent == elevatorLimit)
                 state = ElevatorState.FullWaiting;
+            worker.hasRock = false;
             ts.StartGoingDown(worker);
             UpdateSprites();
         }
