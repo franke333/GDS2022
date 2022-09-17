@@ -20,6 +20,7 @@ public class Tower : Singleton<Tower>
         pickupPos.transform.position += up;
         placedownPos.transform.position += up;
         storage.transform.position += up;
+        levels[levels.Count - 1].GetComponent<SpriteRenderer>().sortingOrder = levels.Count - 1;
     }
 
     private void Update()

@@ -19,6 +19,8 @@ public class Worker : MonoBehaviour
     [SerializeField]
     private float speed=1f;
 
+    private SpriteRenderer srHat;
+
     private WorkerOrderType orderType;
     private float waitTime;
     private Vector2 targetDest;
@@ -35,6 +37,7 @@ public class Worker : MonoBehaviour
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        srHat = transform.GetChild(0).GetComponent<SpriteRenderer>();
         orderIndex=-1;
         NextOrder();
     }
@@ -43,27 +46,27 @@ public class Worker : MonoBehaviour
     {
         orderType = WorkerOrderType.WaitTime;
         waitTime = duration;
-        sr.enabled = visible;
+        EnableDraw(visible);
     }
 
     public void OrderWalk(Vector3 destination,bool visible=true)
     {
-        sr.enabled = visible;
+        EnableDraw(visible);
         orderType = WorkerOrderType.Walk;
         targetDest = destination;
     }
 
     public void OrderWaitOnCall(bool visible)
     {
-        sr.enabled = visible;
+        EnableDraw(visible);
         orderType = WorkerOrderType.WaitUntilCalled;
     }
 
     public void OrderWalkBezier(BezierCurve curve,float inSeconds,bool reversed = false)
     {
-        sr.enabled = true;
+        EnableDraw(true);
         orderType = reversed ? WorkerOrderType.WalkBezierReversed : WorkerOrderType.WalkBezier;
-        sr.sortingOrder = currentTowerLevel + 1;
+        SetLayer(currentTowerLevel + 2);
         bc = curve;
         walkOverSeconds = inSeconds;
         currentWalkTime = reversed ? inSeconds : 0;
@@ -141,12 +144,24 @@ public class Worker : MonoBehaviour
                     NextOrder();
                 }
                 else
-                    transform.position = bc.PosAtTime((walkOverSeconds - currentWalkTime) / walkOverSeconds);
+                    transform.position = bc.PosAtTime( currentWalkTime / walkOverSeconds);
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void SetLayer(int layer)
+    {
+        sr.sortingOrder = layer;
+        srHat.sortingOrder = layer + 1;
+    }
+
+    private void EnableDraw(bool value)
+    {
+        sr.enabled = value;
+        srHat.enabled = value;
     }
 
 }
