@@ -14,23 +14,28 @@ public class Worker : MonoBehaviour
     public string Name;
     public string workerType;
 
-    public float speed=1f;
+    public List<dWorkerOrders> orders;
 
-    public WorkerOrderType orderType;
-    public float waitTime;
-    public Vector2 targetDest;
+    [SerializeField]
+    private float speed=1f;
+
+    private WorkerOrderType orderType;
+    private float waitTime;
+    private Vector2 targetDest;
 
     private int orderIndex = 0;
-    public List<dWorkerOrders> orders;
 
     private BezierCurve bc;
     private float walkOverSeconds;
+    private float currentWalkTime;
 
-    public SpriteRenderer sr;
+    private SpriteRenderer sr;
 
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        orderIndex=-1;
+        NextOrder();
     }
 
     public void OrderWait(float duration,bool visible)
@@ -59,6 +64,7 @@ public class Worker : MonoBehaviour
         sr.sortingOrder = setLayer;
         bc = curve;
         walkOverSeconds = inSeconds;
+        currentWalkTime = 0;
     }
 
     public void NextOrder()
@@ -68,6 +74,7 @@ public class Worker : MonoBehaviour
             orderIndex = 0;
         orders[orderIndex].Invoke(this);
     }
+    
 
     private void Update()
     {
@@ -92,7 +99,14 @@ public class Worker : MonoBehaviour
                     NextOrder();
                 break;
             case WorkerOrderType.WalkBezier:
-
+                currentWalkTime += Time.deltaTime;
+                if (currentWalkTime >= walkOverSeconds)
+                {
+                    transform.position = bc.be_end.transform.position;
+                    NextOrder();
+                }
+                else
+                    transform.position = bc.PosAtTime(currentWalkTime / walkOverSeconds);
                 break;
             case WorkerOrderType.WaitUntilCalled:
                 break;

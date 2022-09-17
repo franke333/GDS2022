@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7853456100483372226}
   - component: {fileID: 302232973334995128}
   m_Layer: 0
-  m_Name: tower1.0
+  m_Name: towerLevel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   front: {fileID: 232733156501357746}
-  traverseInS: 0
+  end: {fileID: 146627059487232331}
+  traverseInS: 11
 --- !u!1 &1750967843478485959
 GameObject:
   m_ObjectHideFlags: 0

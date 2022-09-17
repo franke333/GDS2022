@@ -6,6 +6,7 @@ using UnityEditor;
 public class TowerLevel : MonoBehaviour
 {
     public BezierCurve front;
+    public GameObject end;
 
     public float traverseInS;
 }

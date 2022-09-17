@@ -99,8 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   workerType: 
-  speed: 4
-  orderType: 0
-  waitTime: 0
-  targetDest: {x: 0, y: 0}
-  sr: {fileID: 0}
+  speed: 1

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Tower : Singleton<Tower>
 {
-    public List<GameObject> levels = new List<GameObject>();
+    public List<TowerLevel> levels = new List<TowerLevel>();
 
 }

@@ -38,7 +38,6 @@ public class MinerStation : AStation<MinerStation>
             Worker worker = Instantiate(workerPrefab, spawnPoint.transform.position, Quaternion.identity);
             workers.Add(worker);
             worker.Name = $"Worker {workers.Count}";
-            worker.targetDest = targetWorkerPos.transform.position;
             worker.orders = new List<dWorkerOrders>()
             {
                 SendWorkerOrder,
