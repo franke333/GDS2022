@@ -6,7 +6,7 @@ public delegate void dWorkerOrders(Worker worker);
 
 public enum WorkerOrderType
 {
-    Walk,WalkBezier,WaitTime,WaitUntilCalled
+    Walk,WalkBezier,WalkBezierReversed,WaitTime,WaitUntilCalled
 }
 
 public class Worker : MonoBehaviour
@@ -24,6 +24,7 @@ public class Worker : MonoBehaviour
     private Vector2 targetDest;
 
     private int orderIndex = 0;
+    public int currentTowerLevel = 0;
 
     private BezierCurve bc;
     private float walkOverSeconds;
@@ -58,13 +59,35 @@ public class Worker : MonoBehaviour
         orderType = WorkerOrderType.WaitUntilCalled;
     }
 
-    public void OrderWalkBezier(BezierCurve curve,float inSeconds,int setLayer)
+    public void OrderWalkBezier(BezierCurve curve,float inSeconds,bool reversed = false)
     {
-        orderType = WorkerOrderType.WalkBezier;
-        sr.sortingOrder = setLayer;
+        sr.enabled = true;
+        orderType = reversed ? WorkerOrderType.WalkBezierReversed : WorkerOrderType.WalkBezier;
+        sr.sortingOrder = currentTowerLevel + 1;
         bc = curve;
         walkOverSeconds = inSeconds;
-        currentWalkTime = 0;
+        currentWalkTime = reversed ? inSeconds : 0;
+    }
+
+    public void OrderNextLevelIfExist(bool up)
+    {
+        if (up)
+        {
+            if (currentTowerLevel != Tower.Instance.levels.Count - 1)
+            {
+                currentTowerLevel++;
+                orderIndex -= 3;
+            }
+        }
+        else
+        {
+            if (currentTowerLevel != 0)
+            {
+                orderIndex -= 3;
+                currentTowerLevel--;
+            }
+        }
+        NextOrder();
     }
 
     public void NextOrder()
@@ -109,6 +132,16 @@ public class Worker : MonoBehaviour
                     transform.position = bc.PosAtTime(currentWalkTime / walkOverSeconds);
                 break;
             case WorkerOrderType.WaitUntilCalled:
+                break;
+            case WorkerOrderType.WalkBezierReversed:
+                currentWalkTime -= Time.deltaTime;
+                if (currentWalkTime <= 0)
+                {
+                    transform.position = bc.be_start.transform.position;
+                    NextOrder();
+                }
+                else
+                    transform.position = bc.PosAtTime((walkOverSeconds - currentWalkTime) / walkOverSeconds);
                 break;
             default:
                 break;

@@ -9,7 +9,7 @@ public class TransportStation : AStation<TransportStation>
     [SerializeField]
     private GameObject spawnPoint, quarryPickUp;
     [SerializeField]
-    private MaterialStorage quarryStorage;
+    private MaterialStorage quarryStorage,towerStorage;
 
     private List<Worker> workers = new List<Worker>();
 
@@ -18,22 +18,54 @@ public class TransportStation : AStation<TransportStation>
         worker.OrderWalk(quarryPickUp.transform.position);
     }
 
+    private void GoToTowerStorage(Worker worker)
+    {
+        worker.OrderWalk(Tower.Instance.placedownPos.transform.position);
+    }
+
     private void GoToTower(Worker worker)
     {
         var level = Tower.Instance.levels[0];
         worker.OrderWalk(level.front.be_start.transform.position);
     }
     
+    private void ReturnToRailing(Worker worker)
+    {
+        var level = Tower.Instance.levels[worker.currentTowerLevel];
+        worker.OrderWalk(level.end.transform.position, true);
+    }
     private void UpTheTowerFront(Worker worker)
     {
-        var level = Tower.Instance.levels[0];
-        worker.OrderWalkBezier(level.front, level.traverseInS, 10);
+        var level = Tower.Instance.levels[worker.currentTowerLevel];
+        worker.OrderWalkBezier(level.front, level.traverseInS);
     }
 
     private void UpTheTowerBack(Worker worker)
     {
-        var level = Tower.Instance.levels[0];
+        var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.end.transform.position, false);
+    }
+
+    private void UpTheTowerCheckLevel(Worker worker)
+    {
+        worker.OrderNextLevelIfExist(true);
+    }
+
+    private void DownTheTowerFront(Worker worker)
+    {
+        var level = Tower.Instance.levels[worker.currentTowerLevel];
+        worker.OrderWalkBezier(level.front, level.traverseInS, true);
+    }
+
+    private void DownTheTowerBack(Worker worker)
+    {
+        var level = Tower.Instance.levels[worker.currentTowerLevel];
+        worker.OrderWalk(level.front.be_end.transform.position, false);
+    }
+
+    private void DownTheTowerCheckLevel(Worker worker)
+    {
+        worker.OrderNextLevelIfExist(false);
     }
 
     public override string Name => "Transporters";
@@ -52,7 +84,14 @@ public class TransportStation : AStation<TransportStation>
                 quarryStorage.TryPickupMaterial,
                 GoToTower,
                 UpTheTowerFront,
-                UpTheTowerBack
+                UpTheTowerBack,
+                UpTheTowerCheckLevel,
+                GoToTowerStorage,
+                towerStorage.TryPlaceMaterial,
+                ReturnToRailing,
+                DownTheTowerBack,
+                DownTheTowerFront,
+                DownTheTowerCheckLevel
             };
         }
     }
