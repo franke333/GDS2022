@@ -21,7 +21,7 @@ public class Tower : Singleton<Tower>
     public int Progress { get => _progress; 
         set {
             _progress = value;
-            if (_progress >= 60) {
+            if (_progress >= 20) {
                 _progress = 0;
                 NextLevel();
             }
@@ -30,6 +30,10 @@ public class Tower : Singleton<Tower>
 
     public void NextLevel()
     {
+        if(levels.Count == 0)
+        {
+            transform.Find("Base").gameObject.SetActive(false);
+        }
         TowerLevel pref = levels.Count == 0 ? levelBasePrefab : levelPrefabs[Random.Range(0, levelPrefabs.Count)];
         levels.Add(Instantiate(pref, new Vector3(0,LayerHeight*levels.Count,0) + baseTower.transform.position,Quaternion.identity,transform));
         Vector3 up = new Vector3(0, LayerHeight);

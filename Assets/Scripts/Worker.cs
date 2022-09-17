@@ -35,10 +35,15 @@ public class Worker : MonoBehaviour
     [SerializeField]
     private SpriteRenderer sr, srHat;
 
+    private Animator animator;
+    int animatorVarHash;
     private void Start()
     {
-        orderIndex=-1;
+        animator = transform.GetComponentInChildren<Animator>();
+        animatorVarHash = Animator.StringToHash("Walking");
+        orderIndex =-1;
         NextOrder();
+        
     }
 
     public void OrderWait(float duration,bool visible)
@@ -101,6 +106,12 @@ public class Worker : MonoBehaviour
         NextOrder();
     }
 
+    public void JumpToOrder(int index)
+    {
+        orderIndex = index - 1;
+        NextOrder();
+    }
+
     public void NextOrder()
     {
         orderIndex++;
@@ -112,6 +123,7 @@ public class Worker : MonoBehaviour
 
     private void Update()
     {
+        var before_move = transform.position;
         switch (orderType)
         {
             case WorkerOrderType.Walk:
@@ -157,7 +169,8 @@ public class Worker : MonoBehaviour
             default:
                 break;
         }
-
+        Vector3 after_move = transform.position;
+        UpdateAnim(after_move - before_move);
     }
 
     public void SetLayer(int layer)
@@ -172,4 +185,17 @@ public class Worker : MonoBehaviour
         srHat.enabled = value;
     }
 
+    void UpdateAnim(Vector3 movement)
+    {
+        if(movement.x > 0)
+            sr.flipX = srHat.flipX = false;
+        else if(movement.x < 0)
+            sr.flipX = srHat.flipX = true;
+
+
+        if (movement.x == 0)
+            animator.SetBool(animatorVarHash, false);
+        else
+            animator.SetBool(animatorVarHash, true);
+    }
 }

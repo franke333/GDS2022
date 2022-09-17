@@ -7,8 +7,8 @@ public class TowerLevel : MonoBehaviour
 {
     public BezierCurve front;
     public GameObject end;
-    public GameObject railing;
 
+    public ElevatorScript elevator = null;
 
     public float traverseInS;
 }
