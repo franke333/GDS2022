@@ -6,7 +6,7 @@ public delegate void dWorkerOrders(Worker worker);
 
 public enum WorkerOrderType
 {
-    Walk,WalkBezier,WaitTime,WaitUntilCalled
+    Walk,WaitTime,WaitUntilCalled
 }
 
 public class Worker : MonoBehaviour
@@ -22,9 +22,6 @@ public class Worker : MonoBehaviour
 
     private int orderIndex = 0;
     public List<dWorkerOrders> orders;
-
-    private BezierCurve bc;
-    private float walkOverSeconds;
 
     public SpriteRenderer sr;
 
@@ -51,14 +48,6 @@ public class Worker : MonoBehaviour
     {
         sr.enabled = visible;
         orderType = WorkerOrderType.WaitUntilCalled;
-    }
-
-    public void OrderWalkBezier(BezierCurve curve,float inSeconds,int setLayer)
-    {
-        orderType = WorkerOrderType.WalkBezier;
-        sr.sortingOrder = setLayer;
-        bc = curve;
-        walkOverSeconds = inSeconds;
     }
 
     public void NextOrder()
@@ -90,11 +79,6 @@ public class Worker : MonoBehaviour
                 waitTime -= Time.deltaTime;
                 if (waitTime < 0)
                     NextOrder();
-                break;
-            case WorkerOrderType.WalkBezier:
-
-                break;
-            case WorkerOrderType.WaitUntilCalled:
                 break;
             default:
                 break;
