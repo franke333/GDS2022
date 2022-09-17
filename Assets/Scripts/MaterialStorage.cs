@@ -17,7 +17,7 @@ public class MaterialStorage : MonoBehaviour
             queueTake.Dequeue().NextOrder();
             worker.NextOrder();
         }
-        if (limit != count)
+        else if (limit != count)
         {
             count++;
             worker.NextOrder();

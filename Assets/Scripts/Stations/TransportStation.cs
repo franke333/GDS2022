@@ -21,25 +21,63 @@ public class TransportStation : AStation<TransportStation>
         worker.OrderWalk(Tower.Instance.placedownPos.transform.position);
     }
 
-    private void GoToTower(Worker worker)
+    private void GoToTowerBezier(Worker worker)
     {
-        var level = Tower.Instance.levels[0];
-        worker.OrderWalk(level.front.be_start.transform.position);
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
+        worker.OrderWalkBezier(Tower.Instance.towerEntrance,4f);
     }
-    
+
+    private void GoToQuarryBezier(Worker worker)
+    {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
+        worker.OrderWalkBezier(Tower.Instance.towerEntrance, 4f, true);
+    }
+    private void GoToTowerBeforeBezier(Worker worker)
+    {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
+        worker.OrderWalk(Tower.Instance.towerEntrance.be_start.transform.position);
+    }
+
     private void ReturnToRailing(Worker worker)
     {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.end.transform.position, true);
     }
     private void UpTheTowerFront(Worker worker)
     {
+        if(Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalkBezier(level.front, level.traverseInS);
     }
 
     private void UpTheTowerBack(Worker worker)
     {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.end.transform.position, false);
     }
@@ -51,12 +89,22 @@ public class TransportStation : AStation<TransportStation>
 
     private void DownTheTowerFront(Worker worker)
     {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalkBezier(level.front, level.traverseInS, true);
     }
 
     private void DownTheTowerBack(Worker worker)
     {
+        if (Tower.Instance.levels.Count == 0)
+        {
+            worker.NextOrder();
+            return;
+        }
         var level = Tower.Instance.levels[worker.currentTowerLevel];
         worker.OrderWalk(level.front.be_end.transform.position, false);
     }
@@ -79,7 +127,8 @@ public class TransportStation : AStation<TransportStation>
             {
                 GoToQuarry,
                 quarryStorage.TryPickupMaterial,
-                GoToTower,
+                GoToTowerBeforeBezier,
+                GoToTowerBezier,
                 UpTheTowerFront,
                 UpTheTowerBack,
                 UpTheTowerCheckLevel,
@@ -88,7 +137,8 @@ public class TransportStation : AStation<TransportStation>
                 ReturnToRailing,
                 DownTheTowerBack,
                 DownTheTowerFront,
-                DownTheTowerCheckLevel
+                DownTheTowerCheckLevel,
+                GoToQuarryBezier
             };
             worker.SetLayer(workers.Count*2);
         }
