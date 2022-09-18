@@ -45,6 +45,8 @@ public class Tower : Singleton<Tower>
 
     public void NextLevel()
     {
+        if (GameManager.Instance.currentYear == -1)
+            return;
         if(levels.Count == 0)
         {
             transform.Find("Base").gameObject.SetActive(false);

@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     public int Money { get; set; }
 
+    public GameObject gameOverScreen;
+
     public int yearInSeconds = 120;
 
-    private float yearRemain;
+    public float yearRemain;
 
     public int currentYear = 0;
 
@@ -33,15 +36,18 @@ public class GameManager : Singleton<GameManager>
 
     private void StartNewYear()
     {
-        if(Tower.Instance.levels.Count < deadlines[currentYear])
+        if(currentYear == -1 ||  Tower.Instance.levels.Count < deadlines[currentYear] )
         {
             //LOSE TODO
-            Debug.Log("YOU LOST");
+            gameOverScreen.SetActive(true);
+            currentYear = -1;
             return;
         }
         currentYear++;
         Money += PassiveIncomePerYear(currentYear);
         yearRemain = yearInSeconds;
+        if (currentYear == deadlines.Length)
+            SceneManager.LoadScene("EndScene");
 
     }
 
@@ -56,5 +62,10 @@ public class GameManager : Singleton<GameManager>
         yearRemain -= Time.deltaTime;
         if (yearRemain < 0)
             StartNewYear();
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
