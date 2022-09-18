@@ -59,7 +59,12 @@ public class MinerStation : AStation<MinerStation>
 
     void Update()
     {
+        if (GameManager.Instance.Money < CostNext())
+            return;
         if (Input.GetKeyDown(KeyCode.W))
+        {
+            GameManager.Instance.Money -= CostNext();
             AddWorkers(1);
+        }
     }
 }

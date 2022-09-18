@@ -182,7 +182,12 @@ public class TransportStation : AStation<TransportStation>
 
     void Update()
     {
+        if (GameManager.Instance.Money < CostNext())
+            return;
         if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameManager.Instance.Money -= CostNext();
             AddWorkers(1);
+        }
     }
 }

@@ -63,7 +63,12 @@ public class BuildStation : AStation<BuildStation>
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.Money < CostNext())
+            return;
         if (Input.GetKeyDown(KeyCode.B))
+        {
+            GameManager.Instance.Money -= CostNext();
             AddWorkers(1);
+        }
     }
 }
