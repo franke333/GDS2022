@@ -57,7 +57,7 @@ public class BuildStation : AStation<BuildStation>
 
     public override int CostNext()
     {
-        throw new System.NotImplementedException();
+        return 10 + 5 * GetWorkersCount();
     }
 
     // Update is called once per frame

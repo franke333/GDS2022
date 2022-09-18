@@ -52,7 +52,7 @@ public class MinerStation : AStation<MinerStation>
 
     public override int CostNext()
     {
-        throw new System.NotImplementedException();
+        return 10 + 5 * GetWorkersCount();
     }
 
 

@@ -176,7 +176,7 @@ public class TransportStation : AStation<TransportStation>
 
     public override int CostNext()
     {
-        throw new System.NotImplementedException();
+        return 10 + 5 * GetWorkersCount();
     }
 
 
