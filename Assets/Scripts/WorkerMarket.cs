@@ -16,7 +16,7 @@ public class StationInfoUI
 public class WorkerMarket : MonoBehaviour
 {
     public StationInfoUI builderSt, minerSt, transportSt;
-
+    public TMP_Text money;
     private void RefreshUI()
     {
         int[] workersCount = new int[] {
@@ -39,6 +39,8 @@ public class WorkerMarket : MonoBehaviour
             stations[i].price.text = prices[i].ToString();
             stations[i].buttonPrice.interactable = GameManager.Instance.Money >= prices[i];
         }
+
+        money.text = $"Money: {GameManager.Instance.Money.ToString("D4")}";
     }
 
     public void BuyWorker(int index)
@@ -46,12 +48,15 @@ public class WorkerMarket : MonoBehaviour
         switch (index)
         {
             case 0:
+                GameManager.Instance.Money -= BuildStation.Instance.CostNext();
                 BuildStation.Instance.AddWorkers(1);
                 break;
             case 1:
+                GameManager.Instance.Money -= MinerStation.Instance.CostNext();
                 MinerStation.Instance.AddWorkers(1);
                 break;
             case 2:
+                GameManager.Instance.Money -= TransportStation.Instance.CostNext();
                 TransportStation.Instance.AddWorkers(1);
                 break;
             default:

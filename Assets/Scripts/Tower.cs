@@ -66,6 +66,8 @@ public class Tower : Singleton<Tower>
         foreach (var transporters in storage.GetComponent<MaterialStorage>().queuePlace)
             transporters.transform.position += up;
         levels[levels.Count - 1].GetComponent<SpriteRenderer>().sortingOrder = levels.Count - 100;
+
+        GameManager.Instance.NewLevelCashout();
     }
 
     private void Start()

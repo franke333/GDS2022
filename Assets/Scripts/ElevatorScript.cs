@@ -35,9 +35,9 @@ public class ElevatorScript : MonoBehaviour
         = new int[] { 50,100, 200 }; //TODO
     public static int initCost => upgradeCosts[0];
     private static int[] upgradesElevators
-        = new int[] { 1, 5, 25 };
+        = new int[] { 1, 5, 10 };
     private static int[] upgradeStashes
-        = new int[] { 5, 25, 125 };
+        = new int[] { 4, 15, 20 };
     public int elevatorLevel = -1;
     public void BuyUpgradeElevator()
     {

@@ -15,6 +15,17 @@ public class MaterialStorage : MonoBehaviour
     [SerializeField]
     SpriteRenderer sr;
 
+
+    [SerializeField]
+    GameObject updateSign;
+    int currentLevel = 0;
+    static int[] upgradeCosts
+        = new int[] { 50, 100 };
+
+    static int[] upgradeLimits
+        = new int[] { 5, 25, 125 };
+
+
     public void TryPlaceMaterial(Worker worker)
     {
         if(queueTake.Count != 0)
@@ -75,5 +86,19 @@ public class MaterialStorage : MonoBehaviour
             sr.sprite = stash2;
         else
             sr.sprite = stash1;
+    }
+
+    private void Update()
+    {
+        updateSign.SetActive(!(currentLevel >= upgradeCosts.Length || GameManager.Instance.Money < upgradeCosts[currentLevel]));
+    }
+
+    public void BuyUpgrade()
+    {
+        if (currentLevel >= upgradeCosts.Length || GameManager.Instance.Money < upgradeCosts[currentLevel])
+            return;
+        GameManager.Instance.Money -= upgradeCosts[currentLevel++];
+        limit = upgradeLimits[currentLevel];
+        transform.localScale *= 1.25f;
     }
 }
