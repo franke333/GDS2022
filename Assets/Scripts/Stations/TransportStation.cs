@@ -176,7 +176,7 @@ public class TransportStation : AStation<TransportStation>
 
     public override int CostNext()
     {
-        return 6 + GetWorkersCount();
+        return 10;
     }
 
 
