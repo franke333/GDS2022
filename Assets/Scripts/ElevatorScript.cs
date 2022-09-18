@@ -15,7 +15,14 @@ public class ElevatorScript : MonoBehaviour
     SpriteRenderer stash,bucket;
 
     [SerializeField]
-    Sprite bucketEmpty, bucketFull, stash0, stash1, stash2;
+    Sprite stash0, stash1, stash2;
+    [SerializeField]
+    List<Sprite> bucketsEmpty, bucketsFull;
+
+    [SerializeField]
+    SpriteMask sm;
+    [SerializeField]
+    TowerLevel towerLevel;
 
     TransportStation ts;
     ElevatorState state;
@@ -23,6 +30,33 @@ public class ElevatorScript : MonoBehaviour
     private void Start()
     {
         ts = TransportStation.Instance as TransportStation;
+    }
+    public static int[] upgradeCosts
+        = new int[] { 50,100, 200 }; //TODO
+    public static int initCost => upgradeCosts[0];
+    private static int[] upgradesElevators
+        = new int[] { 1, 5, 25 };
+    private static int[] upgradeStashes
+        = new int[] { 5, 25, 125 };
+    public int elevatorLevel = -1;
+    public void BuyUpgradeElevator()
+    {
+        if (elevatorLevel == upgradeCosts.Length - 1 || upgradeCosts[elevatorLevel+1] > GameManager.Instance.Money) // maxed || no money
+            return;
+        GameManager.Instance.Money -= upgradeCosts[++elevatorLevel];
+        if (elevatorLevel == 0) // buy
+        {
+            gameObject.SetActive(true);
+            //init sprites
+            int layer = towerLevel.GetComponent<SpriteRenderer>().sortingOrder - 300;
+            sm.frontSortingOrder = layer;
+            sm.backSortingOrder = layer - 1;
+            bucket.sortingOrder = layer;
+        }
+        elevatorLimit = upgradesElevators[elevatorLevel];
+        stashLimit = upgradeStashes[elevatorLevel];
+
+        UpdateSprites();
     }
 
     private void UpdateSprites()
@@ -35,9 +69,9 @@ public class ElevatorScript : MonoBehaviour
             stash.sprite = stash1;
 
         if (elevatorCurrent == elevatorLimit)
-            bucket.sprite = bucketFull;
+            bucket.sprite = bucketsFull[elevatorLevel];
         else
-            bucket.sprite = bucketEmpty;
+            bucket.sprite = bucketsEmpty[elevatorLevel];
     }
 
     public void TryPickUp(Worker worker)
