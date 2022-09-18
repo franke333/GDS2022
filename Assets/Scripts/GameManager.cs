@@ -9,13 +9,15 @@ public class GameManager : Singleton<GameManager>
 
     public GameObject gameOverScreen;
 
+    public PlanScript planScript;
+
     public int yearInSeconds = 120;
 
     public float yearRemain;
 
     public int currentYear = 0;
 
-    private int[] deadlines =
+    public int[] deadlines =
         new int[] {0, 1, 2, 3, 5, 7, 9, 11, 14, 17, 20 };
 
     private int PassiveIncomePerYear(int year)
@@ -48,6 +50,8 @@ public class GameManager : Singleton<GameManager>
         yearRemain = yearInSeconds;
         if (currentYear == deadlines.Length)
             SceneManager.LoadScene("EndScene");
+        else
+            planScript.Display();
 
     }
 

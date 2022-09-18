@@ -16,7 +16,7 @@ public class StationInfoUI
 public class WorkerMarket : MonoBehaviour
 {
     public StationInfoUI builderSt, minerSt, transportSt;
-    public TMP_Text money,year,time;
+    public TMP_Text money,year,time,plan;
     private void RefreshUI()
     {
         int[] workersCount = new int[] {
@@ -43,6 +43,7 @@ public class WorkerMarket : MonoBehaviour
         money.text = GameManager.Instance.Money.ToString("D4");
         year.text = GameManager.Instance.currentYear.ToString();
         time.text = $"{(int)((GameManager.Instance.yearRemain * 100) / GameManager.Instance.yearInSeconds)}%";
+        plan.text = (GameManager.Instance.deadlines[GameManager.Instance.currentYear] - Tower.Instance.levels.Count).ToString();
     }
 
     public void BuyWorker(int index)
