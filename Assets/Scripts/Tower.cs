@@ -12,6 +12,11 @@ public class Tower : Singleton<Tower>
 
     public List<GameObject> builderPoints;
 
+    [SerializeField]
+    SpriteRenderer buildProgressSR;
+    [SerializeField]
+    Sprite wall0, wall1, wall2;
+
     public GameObject pickupPos, placedownPos, storage, baseTower;
     public BezierCurve towerEntrance;
 
@@ -21,10 +26,20 @@ public class Tower : Singleton<Tower>
     public int Progress { get => _progress; 
         set {
             _progress = value;
-            if (_progress >= 20) {
+            if (_progress >= 20)
+            {
+                buildProgressSR.sprite = null;
                 _progress = 0;
                 NextLevel();
             }
+            else if (_progress >= 15)
+                buildProgressSR.sprite = wall2;
+            else if (_progress >= 10)
+                buildProgressSR.sprite = wall1;
+            else if (_progress >= 5)
+                buildProgressSR.sprite = wall0;
+            else
+                buildProgressSR.sprite = null;
         } 
     }
 
@@ -40,6 +55,7 @@ public class Tower : Singleton<Tower>
         pickupPos.transform.position += up;
         placedownPos.transform.position += up;
         storage.transform.position += up;
+        buildProgressSR.transform.position += up;
         for (int i = 0; i < builderPoints.Count; i++)
             builderPoints[i].transform.position += up;
         foreach (var builder in BuildStation.Instance.workers)

@@ -122,7 +122,7 @@ public class TransportStation : AStation<TransportStation>
     private void TryToFillElevator(Worker worker)
     {
         ElevatorScript elevator = Tower.Instance.levels[worker.currentTowerLevel].elevator;
-        if (elevator == null)
+        if (elevator == null || !elevator.isActiveAndEnabled)
         {
             worker.NextOrder();
             return;
@@ -133,7 +133,7 @@ public class TransportStation : AStation<TransportStation>
     private void TryToGrabFromElevator(Worker worker)
     {
         ElevatorScript elevator = Tower.Instance.levels[worker.currentTowerLevel].elevator;
-        if (elevator == null)
+        if (elevator == null || !elevator.isActiveAndEnabled)
         {
             worker.NextOrder();
             return;
@@ -176,7 +176,7 @@ public class TransportStation : AStation<TransportStation>
 
     public override int CostNext()
     {
-        throw new System.NotImplementedException();
+        return 10 + 5 * GetWorkersCount();
     }
 
 
