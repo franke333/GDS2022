@@ -18,8 +18,11 @@ public class TowerLevel : MonoBehaviour
 
     private void Update()
     {
-        if (elevator.elevatorLevel == ElevatorScript.upgradeCosts.Length-1)
+        if (elevator.elevatorLevel == ElevatorScript.upgradeCosts.Length - 1)
+        {
+            buyElevButton.SetActive(false);
             return;
+        }
         buyElevButton.SetActive(GameManager.Instance.Money >= ElevatorScript.upgradeCosts[elevator.elevatorLevel + 1]);
     }
 }

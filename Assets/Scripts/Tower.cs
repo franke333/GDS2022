@@ -76,10 +76,4 @@ public class Tower : Singleton<Tower>
     {
         Progress = 0;
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-            NextLevel();
-    }
 }
