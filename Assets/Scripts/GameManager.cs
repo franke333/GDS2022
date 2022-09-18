@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -11,9 +12,14 @@ public class GameManager : Singleton<GameManager>
 
     public PlanScript planScript;
 
+    public Sprite speed1, speed2, speed4;
+    public Image speedButton;
+
     public int yearInSeconds = 120;
 
     public float yearRemain;
+
+    public int GameSpeed = 1;
 
     public int currentYear = 0;
 
@@ -63,7 +69,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        yearRemain -= Time.deltaTime;
+        yearRemain -= Time.deltaTime*GameManager.Instance.GameSpeed;
         if (yearRemain < 0)
             StartNewYear();
     }
@@ -71,5 +77,28 @@ public class GameManager : Singleton<GameManager>
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ChangeSpeed()
+    {
+        switch (GameSpeed)
+        {
+            case 1:
+                GameSpeed = 2;
+                speedButton.sprite = speed2;
+                break;
+                
+            case 2:
+                GameSpeed = 4;
+                speedButton.sprite = speed4;
+                break;
+
+            case 4:
+                GameSpeed = 1;
+                speedButton.sprite = speed1;
+                break;
+            default:
+                break;
+        }
     }
 }

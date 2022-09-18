@@ -122,13 +122,13 @@ public class ElevatorScript : MonoBehaviour
                     UpdateSprites();
                 }
                 else
-                    elevGO.transform.Translate(Vector3.up * speed * Time.deltaTime);
+                    elevGO.transform.Translate(Vector3.up * speed * Time.deltaTime * GameManager.Instance.GameSpeed);
                 break;
             case ElevatorState.TravelDown:
                 if (elevGO.transform.position.y <= yElevMin.transform.position.y)
                     state = ElevatorState.NotFull;
                 else
-                    elevGO.transform.Translate(Vector3.down * speed * Time.deltaTime);
+                    elevGO.transform.Translate(Vector3.down * speed * Time.deltaTime * GameManager.Instance.GameSpeed);
                 break;
             default:
                 break;

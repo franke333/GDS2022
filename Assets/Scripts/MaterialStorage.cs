@@ -99,6 +99,5 @@ public class MaterialStorage : MonoBehaviour
             return;
         GameManager.Instance.Money -= upgradeCosts[currentLevel++];
         limit = upgradeLimits[currentLevel];
-        transform.localScale *= 1.25f;
     }
 }

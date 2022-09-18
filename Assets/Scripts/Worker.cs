@@ -131,23 +131,23 @@ public class Worker : MonoBehaviour
             case WorkerOrderType.Walk:
                 Vector3 target = new Vector3(targetDest.x, targetDest.y);
                 Vector3 dir = (target - transform.position);
-                if (Vector3.Magnitude(dir) <= speed * Time.deltaTime)
+                if (Vector3.Magnitude(dir) <= speed * Time.deltaTime * GameManager.Instance.GameSpeed)
                 {
                     transform.position = target;
                     NextOrder();
                 }
                 else
                 {
-                    transform.Translate(dir.normalized * speed * Time.deltaTime);
+                    transform.Translate(dir.normalized * speed * Time.deltaTime * GameManager.Instance.GameSpeed);
                 }
                 break;
             case WorkerOrderType.WaitTime:
-                waitTime -= Time.deltaTime;
+                waitTime -= Time.deltaTime * GameManager.Instance.GameSpeed;
                 if (waitTime < 0)
                     NextOrder();
                 break;
             case WorkerOrderType.WalkBezier:
-                currentWalkTime += Time.deltaTime;
+                currentWalkTime += Time.deltaTime * GameManager.Instance.GameSpeed;
                 if (currentWalkTime >= walkOverSeconds)
                 {
                     transform.position = bc.be_end.transform.position;
@@ -159,7 +159,7 @@ public class Worker : MonoBehaviour
             case WorkerOrderType.WaitUntilCalled:
                 break;
             case WorkerOrderType.WalkBezierReversed:
-                currentWalkTime -= Time.deltaTime;
+                currentWalkTime -= Time.deltaTime * GameManager.Instance.GameSpeed;
                 if (currentWalkTime <= 0)
                 {
                     transform.position = bc.be_start.transform.position;
